@@ -34,10 +34,40 @@ post("/lists") do
  end
 
  post("/tasks") do
+    description = params.fetch("description")
+    list_id = params.fetch("list_id").to_i()
+    @list = List.find(list_id)
+    @task = Task.new({:description => description, :list_id => list_id, :done => false})
+    @task.save()
+    erb(:task_success)
+  end
+
+#from lesson
+
+get('/lists/:id/edit') do
+  @list = List.find(params.fetch("id").to_i())
+  erb(:list_edit)
+end
+
+patch("/lists/:id") do
+  name = params.fetch("name")
+  @list = List.find(params.fetch("id").to_i())
+  @list.update({:name => name})
+  @lists = List.all()
+  erb(:index)
+end
+
+
+# may need /lists/:id/tasks/:id/edit
+get('/tasks/:id/edit') do
+  @task = Task.find(params.fetch("id").to_i())
+  erb(:task_edit)
+end
+
+patch("/tasks/:id") do
   description = params.fetch("description")
-  list_id = params.fetch("list_id").to_i()
-  @list = List.find(list_id)
-  @task = Task.new({:description => description, :list_id => list_id})
-  @task.save()
-  erb(:task_success)
+  @task = Task.find(params.fetch("id").to_i())
+  @task.update({:description => description})
+  @tasks = Task.all()
+  erb(:index)
 end

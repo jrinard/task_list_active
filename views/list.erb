@@ -10,8 +10,8 @@
 <% if @list.tasks().any?() %>
 
   <ul>
-    <% @list.tasks().each() do |task| %>
-      <li><%= task.description() %> </li>
+    <% @list.tasks().not_done.each() do |task| %>
+      <li><%= task.description() %> <a href="/tasks/<%= task.id() %>/edit"> - Update this task</a></li>
     <% end %>
   </ul>
 
