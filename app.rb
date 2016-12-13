@@ -38,8 +38,11 @@ post("/lists") do
     list_id = params.fetch("list_id").to_i()
     @list = List.find(list_id)
     @task = Task.new({:description => description, :list_id => list_id, :done => false})
-    @task.save()
-    erb(:task_success)
+    if @task.save()
+      erb(:task_success)
+    else
+      erb(:errors)
+    end
   end
 
 #from lesson
